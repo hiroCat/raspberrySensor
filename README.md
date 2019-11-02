@@ -6,3 +6,8 @@ It has different modules:
 - bme280 => slightly modified from https://bitbucket.org/MattHawkinsUK/rpispy-misc code (https://www.raspberrypi-spy.co.uk/2016/07/using-bme280-i2c-temperature-pressure-sensor-in-python/)
 - main => soon to have all the logic , right now only a sleep and calling the bme280 module
 - classes => different data structures , right now only the main one 
+
+# additional config
+For the db I choose postgresql so the config is as :
+- postgres=# create database meteo;
+- meteo => create table logData (dtime timestamp, temp decimal, press double precision, hum double precision);
