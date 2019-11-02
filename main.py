@@ -26,9 +26,8 @@ def add_log(tName, reading):
             conn.commit()
 
 def main():
-    tName = sys.argv[1]
-    print ("Table name "+tName)
-    create_table(tName)
+    tName = sys.argv[1] if len(sys.argv) > 1 else "defaultTable"
+    print ("Using table "+tName)
     while True:
         r = bme280.getReadings()
         add_log(tName,r)
