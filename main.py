@@ -4,13 +4,20 @@ import classes
 # from dotenv import load_dotenv
 # import os
 import psycopg2
+import sys
 
-def add_log(reading):
+def create_table(tName):
+    with psycopg2.connect('dbname=meteo') as conn:
+        with conn.cursor() as cur:
+            cur.execute("CREATE TABLE "+tName+" (dtime timestamp, temp decimal, press double precision, hum double precision);")
+            conn.commit()
+
+def add_log(tName, reading):
     with psycopg2.connect('dbname=meteo') as conn:
         with conn.cursor() as cur:
             query = """
             INSERT INTO
-                logData
+                """+tName+"""
             VALUES
                 (%s, %s, %s, %s)
             """
@@ -19,9 +26,12 @@ def add_log(reading):
             conn.commit()
 
 def main():
+    tName = sys.argv[1]
+    print ("Table name "+tName)
+    create_table(tName)
     while True:
         r = bme280.getReadings()
-        add_log(r)
+        add_log(tName,r)
         time.sleep(300)
 
 if __name__=="__main__":
