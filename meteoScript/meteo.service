@@ -1,0 +1,10 @@
+ [Unit]
+ Description= Meteo Service
+ After=multi-user.target
+
+ [Service]
+ Type=idle
+ ExecStart=/usr/bin/python /home/meteoScript/main.py tableName > /home/pi/sample.log 2>&1
+
+ [Install]
+ WantedBy=multi-user.target
