@@ -10,4 +10,11 @@ It has different modules:
 # additional config
 For the db I choose postgresql so the config is as :
 - postgres=# create database meteo;
-- meteo => create table logData (dtime timestamp, temp decimal, press double precision, hum double precision);
+The setup.py script can also be used to create the main table.
+
+# run it 
+To run you need to specify the table name.(make sure you have the dependencies installed pip install...)
+If you want to run it as a service you need to copy the service to /lib/systemd/system/and also run :
+- sudo chmod 644 /lib/systemd/system/meteo.service 
+- sudo systemctl daemon-reload  
+- sudo systemctl enable meteo.service 
