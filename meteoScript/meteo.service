@@ -5,7 +5,7 @@
  [Service]
  Type=idle
  User=pi
- ExecStart=/usr/bin/python /home/pi/meteoScript/main.py tableName > /home/pi/sample.log 2>&1
+ ExecStart=/usr/bin/python /home/pi/meteoScript/main.py tableName tableName2 > /home/pi/sample.log 2>&1
 
  [Install]
  WantedBy=multi-user.target
