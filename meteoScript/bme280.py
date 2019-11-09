@@ -157,19 +157,23 @@ def readBME280All(addr=DEVICE):
 
   return temperature/100.0,pressure/100.0,humidity
 
-def main():
-  (chip_id, chip_version) = readBME280ID()
+def printAll(address=DEVICE):
+  (chip_id, chip_version) = readBME280ID(address)
   print "Chip ID     :", chip_id
   print "Version     :", chip_version
 
-  temperature,pressure,humidity = readBME280All()
+  temperature,pressure,humidity = readBME280All(address)
   
   print "Temperature : ", temperature, "C"
   print "Pressure : ", pressure, "hPa"
   print "Humidity : ", humidity, "%"
 
-def getReadings():
-  temperature,pressure,humidity = readBME280All()
+def main():
+  printAll()
+  printAll(0x77)
+
+def getReadings(address=DEVICE):
+  temperature,pressure,humidity = readBME280All(address)
   r = classes.reading(temperature,pressure,humidity, datetime.datetime.utcnow())
   return r
 
