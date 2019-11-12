@@ -29,9 +29,14 @@ def saveGrafic(tableName):
     df['datetime'] = pd.to_datetime(df['date'])
     df = df.set_index('datetime')
     df.drop(['date'], axis=1, inplace=True)
-    plt.plot('temp', data=df, marker='o', color=(0.9, 0.2, 0.5, 0.2))
+    plt.plot( 'temp' , data=df, marker='o', color='green', label ='baseS')
+    plt.rcParams["figure.figsize"] = (100,50)
+    plt.legend(loc='upper left')
+    plt.xlabel('Time')
+    plt.ylabel('temp')
+    plt.grid(True)
     plt.savefig(tableName+'.png')
-
+    
 
 for t in ['difference', 'sensorbase', 'sensormodified']:
     saveGrafic(t)
