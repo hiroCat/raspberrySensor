@@ -13,7 +13,7 @@ def getInCurrentT(t):
     utc = t.replace(tzinfo=from_zone)
     return utc.astimezone(to_zone)
 
-def saveGrafic(tableName):
+def getPandas(tableName):
     d = []
     v = []
     with psycopg2.connect('dbname=meteo') as conn:
@@ -29,14 +29,21 @@ def saveGrafic(tableName):
     df['datetime'] = pd.to_datetime(df['date'])
     df = df.set_index('datetime')
     df.drop(['date'], axis=1, inplace=True)
-    plt.plot( 'temp' , data=df, marker='o', color='green', label ='baseS')
+    return df
+
+def plotGrafic(pnd, tableName):
     plt.rcParams["figure.figsize"] = (100,50)
-    plt.legend(loc='upper left')
+    plt.plot( 'temp' , data=pnd, marker='o', color='green', label ='baseS')
     plt.xlabel('Time')
     plt.ylabel('temp')
     plt.grid(True)
     plt.savefig(tableName+'.png')
-    
+    plt.clf()
+
+def saveGrafic(tableName):
+    pd = getPandas(tableName)
+    plotGrafic(pd, tableName)        
+
 
 for t in ['difference', 'sensorbase', 'sensormodified']:
     saveGrafic(t)
