@@ -35,7 +35,7 @@
 </head>
 {% block body %}
 <h1>Charting Stuff!<h1>
-<form autocomplete="off" action="/set_name" method="POST">
+<form autocomplete="off" action="{{ url_for('chart')}}" method="POST">
   <p>
     Date Range:
     <span id="dateRange">
