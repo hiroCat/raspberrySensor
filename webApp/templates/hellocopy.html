@@ -1,0 +1,40 @@
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
+  </head>
+  <body>
+    <canvas id="myChart"></canvas>
+    <script>
+      var ctx = document.getElementById('myChart').getContext('2d');
+      var chart = new Chart(ctx, {
+          // The type of chart we want to create
+          type: 'line',
+
+          // The data for our dataset
+          data: {
+              labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July','du'],
+              datasets: [{
+                  label: 'temp',
+                  backgroundColor: 'rgb(255, 99, 132)',
+                  borderColor: 'rgb(255, 99, 132)',
+                  data: [0, 10, 5, 2, 20, 30, 45,56,66],
+                  fill: false
+              },
+              {
+                  label: 'humidity',
+                  backgroundColor: 'rgb(30, 211, 24)',
+                  borderColor: 'rgb(30, 211, 24)',
+                  data: [10, 1, 50, 20, 2, 3, 50,67,54],
+                  fill: false
+              }]
+          },
+
+          // Configuration options go here
+          options: {}
+      });
+    </script>
+  </body>
+</html>

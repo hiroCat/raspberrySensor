@@ -1,0 +1,27 @@
+<html lang="en">
+  <meta charset="utf-8" />
+  <head>
+    <title>Meteo charts</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
+  </head>
+  <body>
+    <canvas id="myChart"></canvas>
+    <button type="button" onclick="window.location.href='{{ url_for('index')}}';">Home</button>
+    <script>
+      var ctx = document.getElementById('myChart').getContext('2d');
+      var data = {{ session['data'] | safe}};
+      var chart = new Chart(ctx, {
+          // The type of chart we want to create
+          type: 'line',
+
+          // The data for our dataset
+          data: data,
+
+          // Configuration options go here
+          options: {}
+      });
+    </script>
+  </body>
+</html>
