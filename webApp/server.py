@@ -15,46 +15,7 @@ def index():
 
 @app.route('/table', methods=["GET","POST"])
 def getTable():
-    print ("da"+ request.method)
     return render_template('index.html')
-    # error = ''
-    # try:
-    #     if request.method == "POST":
-    #         attempted_username = request.form['username']
-    #         attempted_password = request.form['password']
-    #         if attempted_username == "admin" and attempted_password == "password":
-    #             return redirect(url_for('dashboard'))
-    #         else:
-    #             error = "Invalid credentials. Try Again."
-
-    #     return render_template("login.html", error = error)
-
-    # except Exception as e:
-    #     #flash(e)
-    #     return render_template("login.html", error = error)  
-	
-@app.route('/set_name', methods=['GET', 'POST'])
-def set_name():
-    print ("sdfasdf"+ request.method)
-    print ("----------------------------")
-    print (request.data)
-    print (request.form.items())
-    print ("-----------eee--------------")
-    # for key in request.form.keys():
-    #     for value in request.form.getlist(key):
-    #         print (key+":"+value)
-    for key in request.form.values():
-        print (key)
-    print ("-----------eee--------------")
-    fromI = request.form.get('dateFrom', "default_name")
-    toI = request.form.get('dateTo', "default_name")
-    print(fromI)
-    print(toI)
-    return render_template('hello.html')
-
-@app.route('/other', methods=['GET', 'POST'])
-def other():
-    return render_template('hellocopy.html')
 
 @app.route('/chart', methods=['GET', 'POST'])
 def chart():
