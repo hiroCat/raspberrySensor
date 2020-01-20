@@ -15,15 +15,21 @@
 </head>
 {% block body %}
 <h1>Charting Stuff!<h1>
-<form id="form" autocomplete="off" action="" method="POST">
+<form id="dateForm" autocomplete="off" action="" method="POST">
   <p>
     Date Range:
     <span id="dateRange">
       <input type="text" id="dateFrom" name="dateFrom" size="10"/> to
       <input type="text" id="dateTo" name="dateTo" size="10"/>
     </span>
-    Frequency (in min):
-    <input type="text" id="freq" name="freq" size="10" />
+    Frequency 
+    <select id="freq" name="freq">
+      <option value="5">5 min</option>
+      <option value="10">10 min</option>
+      <option value="15">15 min</option>
+      <option value="30">30 min</option>
+      <option value="60">60 min</option>
+    </select>
     <input type="submit" value="Submit" />
   </p>
 </form>

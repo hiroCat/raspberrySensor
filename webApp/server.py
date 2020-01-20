@@ -4,13 +4,23 @@ import jinja2
 import psycopg2
 from flask_socketio import SocketIO, emit
 import json
+from datetime import datetime , timedelta
+from dateutil import tz
+import psycopg2
+import json
+import configparser
+
+config = configparser.ConfigParser()
+config.read('config.ini')
 
 app = Flask(__name__)
-SESSION_TYPE = 'filesystem'
-app.secret_key = 'bqkMquUfb4FZ0wcQXsGlalQd49o'
+SESSION_TYPE = config['other']['SESSION_TYPE'] 
+app.secret_key = config['other']['secret_key'] 
 app.config.from_object(__name__)
 Session(app)
 socketio = SocketIO(app, async_mode=None, logger=True, engineio_logger=True)
+from_zone = tz.gettz(config['other']['from_zone'])
+to_zone = tz.gettz(config['other']['to_zone'])
 
 @app.route('/', methods=['POST', 'GET'])
 def index():
@@ -22,8 +32,20 @@ def getConnect():
 
 @socketio.on('charts', namespace='/test')
 def getData(message):
-    print ("dada")
-    print (message)
+    # maybe switch to 5min / 10 min / 15min / 20 min / 30 min / 60 min 
+    dateFrom = message[0]
+    if not dateFrom:
+        dateFrom = (datetime.now() - timedelta(1)).strftime("%d/%m/%Y")
+    dateTo = message[1]
+    if not dateTo:
+        dateTo = datetime.now().strftime("%d/%m/%Y")
+    print ("[TRACE] => selecting from date("+dateFrom+") to ("+dateTo+") with a "+message[2]+" min frequency")
+    labelI,valuesI = getDataFromDb(dateFrom, dateTo, "inside")
+    _,valuesO = getDataFromDb(dateFrom, dateTo, "outside")
+
+    print ("[TRACE] => labels => ("+ str(labelI)+")")
+    print ("[TRACE] => values => ("+ str(valuesI)+")")
+
     json_string = '''
         {
               "labels": ["January", "February", "March", "April", "May", "June", "July","du"],
@@ -42,12 +64,36 @@ def getData(message):
                   "fill": false
               }]
           }
-          '''.replace(" ", "")
-    socketio.emit('newData', {'data': json_string}, namespace='/test')
+          '''
+    y = json.loads(json_string)  
+    # junky as ... 
+    y["labels"] = labelI  
+    y["datasets"][0]["data"] = valuesI
+    y["datasets"][1]["data"] = valuesO
+    
+    s = json.dumps(y)
+    socketio.emit('newData', {'data': s}, namespace='/test')
+
+def getInCurrentT(t):
+    utc = t.replace(tzinfo=from_zone)
+    return utc.astimezone(to_zone)
+
+def getDataFromDb(dateFrom, dateTo, tableName):
+    d = []
+    v = []  
+    with psycopg2.connect('dbname='+config['Postgresql']['dbname']+' host='+config['Postgresql']['host']+ ' user='+config['Postgresql']['user']+' password='+config['Postgresql']['password']) as conn:
+        with conn.cursor() as cur:
+            cur.execute('SELECT * FROM '+ tableName + ' WHERE dtime between \''+dateFrom+'\' and \''+dateTo+'\';')
+            a = cur.fetchall()
+            for i in a:
+                t = getInCurrentT(i[0]).strftime("%Y-%m-%d %H:%M")
+                d.append(str(t))
+                v.append(str(i[1]))
+    return d, v
 
 
 if __name__ == "__main__":
-    app.config['SESSION_TYPE'] = 'filesystem'
+    app.config['SESSION_TYPE'] = config['other']['SESSION_TYPE'] 
     sess = Session()
     sess.init_app(app)
     socketio.run(app)

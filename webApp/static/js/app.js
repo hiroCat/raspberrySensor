@@ -21,8 +21,8 @@ $(document).ready(function(){
     });
 
     
-    $('#form').submit(function(){
-        socket.emit('charts', $('#form').val());
+    $('#dateForm').submit(function(){
+        socket.emit('charts', [$('#dateFrom').val(),$('#dateTo').val(),$('#freq').val()]);
         return false;
     });
 
